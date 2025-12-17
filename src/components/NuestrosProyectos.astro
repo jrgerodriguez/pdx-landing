@@ -1,0 +1,133 @@
+---
+const projects = [
+  {
+    title: "Monumental General Insurance",
+    category: "Insurance",
+    image: "/images/proyectos/monumental.png",
+    tech: ["HTML", "CSS", "JavaScript"],
+    link: "https://www.monumentalinsurance.com/"
+  },
+  {
+    title: "FLB ReGenesis website",
+    category: "Healthcare Organization Website",
+    image: "/images/proyectos/renal.png",
+    tech: ["React"],
+    link: "https://www.flbrenalinstitutionalfoundation.org/"
+  },
+  {
+    title: "Auto Collision Group",
+    category: "Automotive Repair",
+    image: "/images/proyectos/acg.png",
+    tech: ["WordPress"],
+    link: "https://autoacg.com/"
+  },
+  {
+    title: "Dashboards Personalizados",
+    category: "Dashboards",
+    image: "/images/proyectos/dashboards.jpg",
+    tech: ["Node", "Supabase", "NextJS", "React"],
+    link: "#dashboards"
+  },
+  {
+    title: "Denzo Studios",
+    category: "Tecnology, IA",
+    image: "/images/proyectos/denzo.png",
+    tech: ["Wordpress"],
+    link: "https://denzostudiospro.com/"
+  }
+];
+---
+
+<section id="projects" class="py-32 bg-white">
+  <div class="max-w-7xl mx-auto px-6">
+
+    <!-- Header -->
+    <div class="mb-24 max-w-3xl">
+      <h2 class="text-5xl font-bold mb-6 leading-tight">
+        Nuestros Proyectos
+      </h2>
+      <p class="text-gray-500 text-xl">
+        Trabajos reales para empresas reales. Diseño limpio, enfoque funcional.
+      </p>
+    </div>
+
+    <!-- Grid -->
+    <div class="grid gap-20 md:grid-cols-2">
+
+      {projects.map((project, index) => (
+        <a
+          href={project.link}
+          target={project.link.startsWith("#") ? "_self" : "_blank"}
+          rel={project.link.startsWith("#") ? undefined : "noopener noreferrer"}
+          class={`
+            group block
+            ${index === 2 ? "md:col-span-2" : ""}
+          `}
+        >
+
+
+        <!-- Imagen -->
+            <div class="
+            overflow-hidden
+            rounded-2xl
+            mb-6
+            shadow-[0_10px_30px_rgba(0,0,0,0.2)]
+            transition-shadow duration-500
+            group-hover:shadow-[0_18px_45px_rgba(0,0,0,0.12)]
+            ">
+
+            <img
+            src={project.image}
+            alt={project.title}
+            class="
+                w-full h-[260px] md:h-[360px]
+                object-cover
+                transition-transform duration-700
+                group-hover:scale-105
+            "
+            />
+        </div>
+
+        <!-- Info -->
+        <div class="flex justify-between items-start gap-6">
+            <div>
+            <h3 class="text-2xl font-semibold mb-1">
+                {project.title}
+            </h3>
+
+            <p class="text-gray-500 mb-3">
+                {project.category}
+            </p>
+
+            <!-- Tech tags -->
+            <div class="flex flex-wrap gap-2">
+                {project.tech.map(t => (
+                <span class="
+                    text-xs
+                    px-2.5 py-1
+                    rounded-full
+                    bg-gray-100
+                    text-gray-600
+                ">
+                    {t}
+                </span>
+                ))}
+            </div>
+            </div>
+
+            <span class="
+            text-gray-400
+            text-xl
+            transform transition-transform
+            group-hover:translate-x-1
+            ">
+            →
+            </span>
+        </div>
+
+        </a>
+      ))}
+
+    </div>
+  </div>
+</section>
