@@ -1,4 +1,4 @@
-<section id="dashboards" class="py-32 bg-gray-50 ">
+<section id="dashboards" class="py-32 bg-gray-50">
   <div class="max-w-7xl mx-auto px-6">
 
     <!-- Header -->
@@ -16,27 +16,29 @@
       </p>
     </div>
 
-    <!-- Grid de imágenes -->
+    <!-- Grid -->
     <div class="grid gap-10 md:grid-cols-2">
-
       {[
         "/images/dashboards/dash1.png",
         "/images/dashboards/dash2.png",
         "/images/dashboards/dash3.png",
         "/images/dashboards/dash4.png"
-      ].map(img => (
-        <div class="
-          rounded-2xl
-          overflow-hidden
-          shadow-[0_10px_30px_rgba(0,0,0,0.15)]
-          hover:shadow-[0_18px_45px_rgba(0,0,0,0.2)]
-          transition-shadow duration-500
-          hover:scale-110
-          transform
-          transition-transform
-          duration-300
-          ease-in-out
-        ">
+      ].map((img) => (
+        <div
+          class="
+            dashboard-thumb
+            cursor-pointer
+            rounded-2xl
+            overflow-hidden
+            shadow-[0_10px_30px_rgba(0,0,0,0.15)]
+            hover:shadow-[0_18px_45px_rgba(0,0,0,0.2)]
+            transition-all
+            duration-300
+            ease-out
+            hover:scale-[1.03]
+          "
+          data-src={img}
+        >
           <img
             src={img}
             class="w-full object-cover"
@@ -44,7 +46,55 @@
           />
         </div>
       ))}
+    </div>
+  </div>
 
+  <!-- Modal -->
+  <div
+    id="imageModal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-sm"
+  >
+    <div class="relative max-w-6xl mx-auto px-6">
+      <button
+        id="closeModal"
+        class="absolute -top-10 right-0 text-white text-3xl hover:opacity-70"
+      >
+        &times;
+      </button>
+
+      <img
+        id="modalImage"
+        src=""
+        alt="Dashboard large preview"
+        class="max-h-[80vh] w-auto rounded-2xl shadow-2xl"
+      />
     </div>
   </div>
 </section>
+
+<script>
+  const modal = document.getElementById("imageModal");
+  const modalImage = document.getElementById("modalImage");
+  const closeBtn = document.getElementById("closeModal");
+
+  document.querySelectorAll(".dashboard-thumb").forEach(card => {
+    card.addEventListener("click", () => {
+      const src = card.dataset.src;
+      modalImage.src = src;
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    });
+  });
+
+  closeBtn.addEventListener("click", () => {
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  });
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+  });
+</script>
