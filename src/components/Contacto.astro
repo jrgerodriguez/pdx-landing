@@ -58,6 +58,8 @@
               type="text"
               placeholder="Tu nombre"
               required
+              minlength="2"
+              maxlength="60"
               oninvalid="this.setCustomValidity('Por favor, ingresa tu nombre.')"
               oninput="this.setCustomValidity('')"
               class="
@@ -83,8 +85,15 @@
               type="email"
               placeholder="tu@email.com"
               required
-              oninvalid="this.setCustomValidity('Por favor, ingresa tu email.')"
+              oninvalid="
+                if (this.value === '') {
+                  this.setCustomValidity('Por favor, ingresa tu correo electrónico');
+                } else {
+                  this.setCustomValidity('Formato requerido: correo@gmail.com');
+                }
+              "
               oninput="this.setCustomValidity('')"
+              
               class="
                 w-full
                 border
@@ -107,9 +116,19 @@
               name="telefono"
               type="tel"
               placeholder="Tu número de teléfono"
-              oninvalid="this.setCustomValidity('Por favor, ingresa tu número de teléfono.')"
+              pattern="[0-9]+" 
+              inputmode="numeric" 
+              oninvalid="
+                if (this.value === '') {
+                  this.setCustomValidity('Por favor, ingresa tu número de teléfono.');
+                } else {
+                  this.setCustomValidity('Solo valores numéricos');
+                }
+              "
               oninput="this.setCustomValidity('')"
               required
+              minlength="8"
+              maxlength="15"
               class="
                 w-full
                 border
@@ -132,9 +151,17 @@
               name="mensaje"
               rows="4"
               placeholder="Contanos sobre tu proyecto"
-              oninvalid="this.setCustomValidity('Debes ingresar una descripción.')"
+              oninvalid="
+                if (this.value === '') {
+                  this.setCustomValidity('Debes ingresar una descripción.');
+                } else {
+                  this.setCustomValidity('Mínimo de 10 caracteres');
+                }
+              "
               oninput="this.setCustomValidity('')"
               required
+              minlength="10"
+              maxlength="1000"
               class="
                 w-full
                 border
@@ -170,8 +197,7 @@
       </form>
 
     <script>
-      const form = document.querySelector("form");
-
+      const form = document.querySelector("form");      
       form?.addEventListener("submit", async(e) => {
         e.preventDefault();
 
