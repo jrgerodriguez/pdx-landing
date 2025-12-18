@@ -56,6 +56,9 @@
             <input
               type="text"
               placeholder="Tu nombre"
+              required
+              oninvalid="this.setCustomValidity('Por favor, ingresa tu nombre.')"
+              oninput="this.setCustomValidity('')"
               class="
                 w-full
                 border
@@ -77,6 +80,9 @@
             <input
               type="email"
               placeholder="tu@email.com"
+              required
+              oninvalid="this.setCustomValidity('Por favor, ingresa tu email.')"
+              oninput="this.setCustomValidity('')"
               class="
                 w-full
                 border
@@ -98,6 +104,9 @@
             <input
               type="tel"
               placeholder="Tu número de teléfono"
+              oninvalid="this.setCustomValidity('Por favor, ingresa tu número de teléfono.')"
+              oninput="this.setCustomValidity('')"
+              required
               class="
                 w-full
                 border
@@ -119,6 +128,9 @@
             <textarea
               rows="4"
               placeholder="Contanos sobre tu proyecto"
+              oninvalid="this.setCustomValidity('Debes ingresar una descripción.')"
+              oninput="this.setCustomValidity('')"
+              required
               class="
                 w-full
                 border
