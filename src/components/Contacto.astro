@@ -150,8 +150,11 @@
             ></textarea>
           </div>
 
+          <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
+
           <button
             type="submit"
+            id="submit-button"
             class="
               w-full
               bg-black
@@ -167,38 +170,137 @@
           </button>
 
         </div>
+        <div
+          id="form-error"
+          class="hidden mt-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600"
+        ></div>
+        <div
+          id="form-message"
+          class="hidden mt-6 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-600"
+        ></div>
       </form>
 
-    <script>
-      const form = document.querySelector("form");
+      <script>
+        const form = document.querySelector("form");
+        const errorBox = document.getElementById("form-error");
+        const messageBox = document.getElementById("form-message");
+        const submitButton = document.getElementById("submit-button")
+        console.log(submitButton)
 
-      form?.addEventListener("submit", async(e) => {
-        e.preventDefault();
+        let errorTimeout = null;
+        let messageTimeout = null;
 
-        const formData = Object.fromEntries(new FormData(form));
+        //Carga del formulario
+        const formLoadTime = Date.now()
+        
+        function clearError() {
+          errorBox.textContent = "";
+          errorBox.classList.add("hidden");
+          if(errorTimeout) {
+            clearTimeout(errorTimeout)
+          }
+          errorTimeout = null
+        }
 
-        try {
-          const response = await fetch("https://n8n-n8n.lyacea.easypanel.host/webhook/d29401d6-22a9-4e1b-9c54-a6a1beec64cd", {
-            method: "POST",
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-          })
+        function clearMessage() {
+          messageBox.textContent = "";
+          messageBox.classList.add("hidden");
+          if(messageTimeout) {
+            clearTimeout(messageTimeout)
+          }
+          messageTimeout = null
+        }
+        
+        function showMessage(message) {
+          clearMessage()
+          messageBox.textContent = message;
+          messageBox.classList.remove("hidden");
+          messageTimeout = setTimeout(() => {
+            clearMessage()
+          }, 3000);
+        }
 
-          if(!response) {
-            alert("⚠️ Error al enviar formulario.")
+
+        function showError(message) {
+          clearError()
+          errorBox.textContent = message;
+          errorBox.classList.remove("hidden");
+          errorTimeout = setTimeout(() => {
+            clearError()
+          }, 3000);
+        }
+
+
+        form?.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          clearError();
+
+          const formData = Object.fromEntries(new FormData(form));
+
+          //Honeypot
+          if(formData.website) {
+            return;
           }
 
-          alert("✅ Formulario enviado.")
-          form.reset()
+          //Too fast submit
+          const now = Date.now()
+          if(now - formLoadTime < 3000) {
+            return
+          }
 
-        } catch (error) {
-          console.error(error)
-        }
-      })
-    </script>
+          formData.nombre = formData.nombre.trim();
+          formData.email = formData.email.trim();
+          formData.mensaje = formData.mensaje.trim();
+          formData.telefono = formData.telefono
+            .replace(/\s+/g, "")
+            .replace(/\D/g, "");
 
+          if (formData.nombre.length < 2 || formData.nombre.length > 60) {
+            showError("El nombre debe tener entre 2 y 60 caracteres.");
+            return;
+          }
+
+          if (!formData.email) {
+            showError("Ingresá un email válido.");
+            return;
+          }
+
+          if (formData.telefono.length < 8 || formData.telefono.length > 15) {
+            showError("El teléfono debe contener solo números y ser válido.");
+            return;
+          }
+
+          if (formData.mensaje.length < 10 || formData.mensaje.length > 1000) {
+            showError("El mensaje debe tener entre 10 y 1000 caracteres.");
+            return;
+          }
+
+          try {
+            submitButton.disabled = true;
+            const response = await fetch(
+              "https://n8n-n8n.lyacea.easypanel.host/webhook/d29401d6-22a9-4e1b-9c54-a6a1beec64cd",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+              }
+            );
+
+            if (!response.ok) {
+              showError("Ocurrió un error al enviar el formulario.");
+              return;
+            }
+            form.reset();
+            showMessage("✅ Formulario enviado.");
+            
+          } catch (error) {
+            console.error(error);
+            showError("Error de conexión. Intentá nuevamente.");
+          } finally {
+            submitButton.disabled = false;
+          }
+        });
+      </script>
     </div>
   </div>
 </section>
